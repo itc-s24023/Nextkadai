@@ -1,47 +1,52 @@
-import Link from 'next/link';
-import { client, Area } from '@/lib/microcms';
-import styles from './page.module.css';
+import Link from "next/link";
+import { client, Area } from "@/lib/microcms";
+import { fetchWeatherData } from "@/lib/weather";
+import styles from "./page.module.css";
 
 type WeatherData = {
-  main: {
+  current: {
     temp: number;
     feels_like: number;
     humidity: number;
-  };
-  weather: Array<{
-    main: string;
-    description: string;
-  }>;
-  wind: {
-    speed: number;
+    weather: Array<{
+      main: string;
+      description: string;
+    }>;
+    wind_speed: number;
   };
 };
 
-async function getWeather(lat: string, lon: string): Promise<WeatherData | null> {
+async function getWeather(
+  lat: string,
+  lon: string
+): Promise<WeatherData | null> {
   try {
     const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
-    const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=ja`,
-      { next: { revalidate: 3600 } }
-    );
-    
-    if (!res.ok) return null;
-    return res.json();
+    if (!apiKey) return null;
+
+    const data = await fetchWeatherData({
+      lat: parseFloat(lat),
+      lon: parseFloat(lon),
+      exclude: "",
+      appid: apiKey,
+    });
+
+    return data;
   } catch (error) {
-    console.error('Weather fetch error:', error);
+    console.error("Weather fetch error:", error);
     return null;
   }
 }
 
-export default async function AreaDetail({ 
-  params 
-}: { 
-  params: Promise<{ id: string }> 
+export default async function AreaDetail({
+  params,
+}: {
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  
+
   const area: Area = await client.get({
-    endpoint: 'areas',
+    endpoint: "areas",
     contentId: id,
   });
 
@@ -49,14 +54,16 @@ export default async function AreaDetail({
 
   return (
     <div className={styles.container}>
-      <Link href="/" className={styles.backLink}>← 戻る</Link>
-      
+      <Link href="/" className={styles.backLink}>
+        ← 戻る
+      </Link>
+
       <h1 className={styles.title}>{area.name}</h1>
-      
+
       {area.image && (
         <img src={area.image.url} alt={area.name} className={styles.image} />
       )}
-      
+
       <div className={styles.description}>{area.description}</div>
 
       <div className={styles.weatherCard}>
@@ -64,13 +71,17 @@ export default async function AreaDetail({
         {weather ? (
           <>
             <div className={styles.weatherMain}>
-              <div className={styles.temp}>{Math.round(weather.main.temp)}°C</div>
-              <div className={styles.weatherDesc}>{weather.weather[0].description}</div>
+              <div className={styles.temp}>
+                {Math.round(weather.current.temp)}°C
+              </div>
+              <div className={styles.weatherDesc}>
+                {weather.current.weather[0].description}
+              </div>
             </div>
             <div className={styles.weatherDetails}>
-              <p>体感温度: {Math.round(weather.main.feels_like)}°C</p>
-              <p>湿度: {weather.main.humidity}%</p>
-              <p>風速: {weather.wind.speed} m/s</p>
+              <p>体感温度: {Math.round(weather.current.feels_like)}°C</p>
+              <p>湿度: {weather.current.humidity}%</p>
+              <p>風速: {weather.current.wind_speed} m/s</p>
             </div>
           </>
         ) : (

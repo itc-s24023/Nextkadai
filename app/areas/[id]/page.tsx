@@ -1,42 +1,9 @@
 import Link from "next/link";
 import { client, Area } from "@/lib/microcms";
-import { fetchWeatherData } from "@/lib/weather";
+import { getWeather } from "@/lib/weather";
 import styles from "./page.module.css";
 
-type WeatherData = {
-  current: {
-    temp: number;
-    feels_like: number;
-    humidity: number;
-    weather: Array<{
-      main: string;
-      description: string;
-    }>;
-    wind_speed: number;
-  };
-};
 
-async function getWeather(
-  lat: string,
-  lon: string
-): Promise<WeatherData | null> {
-  try {
-    const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
-    if (!apiKey) return null;
-
-    const data = await fetchWeatherData({
-      lat: parseFloat(lat),
-      lon: parseFloat(lon),
-      exclude: "",
-      appid: apiKey,
-    });
-
-    return data;
-  } catch (error) {
-    console.error("Weather fetch error:", error);
-    return null;
-  }
-}
 
 export default async function AreaDetail({
   params,
@@ -49,8 +16,10 @@ export default async function AreaDetail({
     endpoint: "areas",
     contentId: id,
   });
+  console.log(area);
 
-  const weather = await getWeather(area.latitude, area.longitude);
+  const weather = await getWeather({lat: parseFloat(area.latitude), lon: parseFloat(area.longtude), units: "metric"});
+  console.log(weather);
 
   return (
     <div className={styles.container}>
@@ -72,16 +41,15 @@ export default async function AreaDetail({
           <>
             <div className={styles.weatherMain}>
               <div className={styles.temp}>
-                {Math.round(weather.current.temp)}°C
+                {Math.round(weather.main.temp)}°C
               </div>
               <div className={styles.weatherDesc}>
-                {weather.current.weather[0].description}
+                {/* {weather.main.description} */}
               </div>
             </div>
             <div className={styles.weatherDetails}>
-              <p>体感温度: {Math.round(weather.current.feels_like)}°C</p>
-              <p>湿度: {weather.current.humidity}%</p>
-              <p>風速: {weather.current.wind_speed} m/s</p>
+              <p>体感温度: {Math.round(weather.main.feels_like)}°C</p>
+              <p>湿度: {weather.main.humidity}%</p>
             </div>
           </>
         ) : (

@@ -13,5 +13,5 @@ export type Area = {
     url: string;
   };
   latitude: string;
-  longitude: string;
+  longtude: string;
 };

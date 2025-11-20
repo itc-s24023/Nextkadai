@@ -1,6 +1,5 @@
-import Link from "next/link";
-import Image from "next/image";
 import { client, Area } from "@/lib/microcms";
+import AreaList from "./components/AreaList";
 import styles from "./page.module.css";
 
 export default async function Home() {
@@ -32,61 +31,7 @@ export default async function Home() {
       </header>
 
       <div className={styles.gridWrapper}>
-        <div className={styles.grid}>
-          {areas.map((area, index) => {
-            const feature = areaFeatures[area.id] || {
-              badge: "観光地",
-              icon: "🌺",
-              tip: "魅力的なスポット",
-            };
-
-            return (
-              <Link
-                href={`/areas/${area.id}`}
-                key={area.id}
-                className={styles.card}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {area.image && (
-                  <div className={styles.imageWrapper}>
-                    <div className={styles.badge}>{feature.badge}</div>
-                    <Image
-                      src={area.image.url}
-                      alt={area.name}
-                      className={styles.image}
-                      width={400}
-                      height={220}
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                )}
-                <div className={styles.cardContent}>
-                  <h2 className={styles.cardTitle}>{area.name}</h2>
-                  <p className={styles.cardDescription}>{area.description}</p>
-
-                  <div className={styles.cardInfo}>
-                    <div className={styles.infoItem}>
-                      <span className={styles.infoIcon}>{feature.icon}</span>
-                      <span className={styles.infoText}>{feature.tip}</span>
-                    </div>
-                    <div className={styles.infoItem}>
-                      <span className={styles.infoIcon}>🌡️</span>
-                      <span className={styles.infoText}>リアルタイム気温</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.cardFooter}>
-                  <span>天気を見る</span>
-                  <span className={styles.liveIndicator}>
-                    <span className={styles.pulse}></span>
-                    Live
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+        <AreaList areas={areas} areaFeatures={areaFeatures} />
       </div>
     </div>
   );

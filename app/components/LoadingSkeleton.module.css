@@ -1,0 +1,89 @@
+.skeleton {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #e0e0e0 20%,
+    #f0f0f0 40%,
+    #f0f0f0 100%
+  );
+  background-size: 200% 100%;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeletonContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.skeletonCard {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.skeletonImage {
+  width: 100%;
+  height: 220px;
+  background: #f0f0f0;
+  animation: shimmer 2s infinite;
+}
+
+.skeletonContent {
+  padding: 1.5rem;
+}
+
+.skeletonTitle {
+  height: 24px;
+  width: 60%;
+  margin-bottom: 1rem;
+  background: #f0f0f0;
+  border-radius: 4px;
+  animation: shimmer 2s infinite;
+}
+
+.skeletonDescription {
+  height: 16px;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  background: #f0f0f0;
+  border-radius: 4px;
+  animation: shimmer 2s infinite;
+}
+
+.skeletonInfo {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.skeletonInfoItem {
+  height: 20px;
+  width: 40%;
+  background: #f0f0f0;
+  border-radius: 4px;
+  animation: shimmer 2s infinite;
+}
+
+.loadingMessage {
+  text-align: center;
+  color: white;
+  font-size: 1.2rem;
+  padding: 3rem;
+  grid-column: 1 / -1;
+}

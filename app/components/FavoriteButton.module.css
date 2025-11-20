@@ -1,0 +1,30 @@
+.favoriteButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #ffd700;
+  background: white;
+  color: #333;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+}
+
+.favoriteButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+.favoriteButton.active {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #333;
+  border-color: #ffc107;
+}
+
+.favoriteButton:active {
+  transform: translateY(0);
+}

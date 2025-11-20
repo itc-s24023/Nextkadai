@@ -1,0 +1,37 @@
+"use client";
+
+import { useState } from "react";
+import styles from "./SearchBar.module.css";
+
+interface SearchBarProps {
+  onSearch: (query: string) => void;
+}
+
+export default function SearchBar({ onSearch }: SearchBarProps) {
+  const [query, setQuery] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(query);
+  };
+
+  return (
+    <form className={styles.searchForm} onSubmit={handleSubmit}>
+      <div className={styles.searchContainer}>
+        <input
+          type="text"
+          className={styles.searchInput}
+          placeholder="地域名で検索..."
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            onSearch(e.target.value);
+          }}
+        />
+        <button type="submit" className={styles.searchButton}>
+          🔍
+        </button>
+      </div>
+    </form>
+  );
+}
